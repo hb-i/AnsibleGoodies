@@ -1,0 +1,12 @@
+- name: Mikrotik Backup Device Configuration
+  hosts: mikrotik
+  connection: network_cli
+  tasks:
+  - name: Export the config output from router
+    routeros_command:
+      commands: 'export'
+    register: output
+  - name: Copy the router config output into a file
+    copy:
+      content: "{{ output.stdout[0] }}"
+      dest: "/etc/ansible/backups/mikrotik/{{ inventory_hostname }}.txt"
